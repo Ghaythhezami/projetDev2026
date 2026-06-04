@@ -413,9 +413,6 @@ namespace AgileAi.Data.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Filiale")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("MotDePasse")
                         .HasColumnType("nvarchar(max)");
 

@@ -32,23 +32,23 @@ DECLARE @IssueVelocityId uniqueidentifier = 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeee
 DECLARE @IssueKanbanId uniqueidentifier = 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeee6';
 
 INSERT INTO dbo.Users
-    (UserId, Nom, Prenom, Email, MotDePasse, Telephone, Role, Filiale, RefreshToken, RefreshTokenExpiryTime, Token, isDeleted)
-SELECT @OwnerId, 'Ben Salem', 'Amira', 'amira.bensalem@poulina.com', 'Dev2026@123', '+216 20 451 120', 'ProductOwner', 'Tunis', NULL, DATEADD(day, 30, SYSUTCDATETIME()), NULL, 0
+    (UserId, Nom, Prenom, Email, MotDePasse, Telephone, Role, RefreshToken, RefreshTokenExpiryTime, Token, isDeleted)
+SELECT @OwnerId, 'Ben Salem', 'Amira', 'amira.bensalem@poulina.com', 'Dev2026@123', '+216 20 451 120', 'ProductOwner', NULL, DATEADD(day, 30, SYSUTCDATETIME()), NULL, 0
 WHERE NOT EXISTS (SELECT 1 FROM dbo.Users WHERE UserId = @OwnerId);
 
 INSERT INTO dbo.Users
-    (UserId, Nom, Prenom, Email, MotDePasse, Telephone, Role, Filiale, RefreshToken, RefreshTokenExpiryTime, Token, isDeleted)
-SELECT @ScrumMasterId, 'Mansouri', 'Youssef', 'youssef.mansouri@poulina.com', 'Dev2026@123', '+216 29 883 014', 'ScrumMaster', 'Sfax', NULL, DATEADD(day, 30, SYSUTCDATETIME()), NULL, 0
+    (UserId, Nom, Prenom, Email, MotDePasse, Telephone, Role, RefreshToken, RefreshTokenExpiryTime, Token, isDeleted)
+SELECT @ScrumMasterId, 'Mansouri', 'Youssef', 'youssef.mansouri@poulina.com', 'Dev2026@123', '+216 29 883 014', 'ScrumMaster', NULL, DATEADD(day, 30, SYSUTCDATETIME()), NULL, 0
 WHERE NOT EXISTS (SELECT 1 FROM dbo.Users WHERE UserId = @ScrumMasterId);
 
 INSERT INTO dbo.Users
-    (UserId, Nom, Prenom, Email, MotDePasse, Telephone, Role, Filiale, RefreshToken, RefreshTokenExpiryTime, Token, isDeleted)
-SELECT @DeveloperId, 'Karray', 'Nour', 'nour.karray@poulina.com', 'Dev2026@123', '+216 55 762 331', 'Developer', 'Sousse', NULL, DATEADD(day, 30, SYSUTCDATETIME()), NULL, 0
+    (UserId, Nom, Prenom, Email, MotDePasse, Telephone, Role, RefreshToken, RefreshTokenExpiryTime, Token, isDeleted)
+SELECT @DeveloperId, 'Karray', 'Nour', 'nour.karray@poulina.com', 'Dev2026@123', '+216 55 762 331', 'Developer', NULL, DATEADD(day, 30, SYSUTCDATETIME()), NULL, 0
 WHERE NOT EXISTS (SELECT 1 FROM dbo.Users WHERE UserId = @DeveloperId);
 
 INSERT INTO dbo.Users
-    (UserId, Nom, Prenom, Email, MotDePasse, Telephone, Role, Filiale, RefreshToken, RefreshTokenExpiryTime, Token, isDeleted)
-SELECT @QaId, 'Trabelsi', 'Mehdi', 'mehdi.trabelsi@poulina.com', 'Dev2026@123', '+216 24 118 909', 'QA', 'Tunis', NULL, DATEADD(day, 30, SYSUTCDATETIME()), NULL, 0
+    (UserId, Nom, Prenom, Email, MotDePasse, Telephone, Role, RefreshToken, RefreshTokenExpiryTime, Token, isDeleted)
+SELECT @QaId, 'Trabelsi', 'Mehdi', 'mehdi.trabelsi@poulina.com', 'Dev2026@123', '+216 24 118 909', 'QA', NULL, DATEADD(day, 30, SYSUTCDATETIME()), NULL, 0
 WHERE NOT EXISTS (SELECT 1 FROM dbo.Users WHERE UserId = @QaId);
 
 IF NOT EXISTS (SELECT 1 FROM dbo.Projects WHERE [Key] = 'TRC')

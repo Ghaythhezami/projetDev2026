@@ -32,8 +32,6 @@ namespace AgileAi.Domain.Dto
 
         [Required]
         public string Role { get; set; }
-
-        public string Filiale { get; set; }
     }
 
     public class UserResponseDto
@@ -44,6 +42,5 @@ namespace AgileAi.Domain.Dto
         public string Email { get; set; }
         public string Telephone { get; set; }
         public string Role { get; set; }
-        public string Filiale { get; set; }
     }
 }
