@@ -1,0 +1,72 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# Build output
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+[Bb]uild/
+[Ll]og/
+*.log
+
+# .NET
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+artifacts/
+publish/
+publish-check/
+.dotnet-home/
+.nuget-packages/
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+project.assets.json
+*.nuget.g.props
+*.nuget.g.targets
+*.nuget.dgspec.json
+
+# Entity Framework / generated caches
+*.AssemblyInfo.cs
+*.AssemblyInfoInputs.cache
+*.GeneratedMSBuildEditorConfig.editorconfig
+*.GlobalUsings.g.cs
+*.assets.cache
+*.csproj.AssemblyReference.cache
+*.csproj.CoreCompileInputs.cache
+*.csproj.FileListAbsolute.txt
+
+# Local application files
+Poulina.TraceServer.Api/uploads/
+uploads/
+
+# Secrets and environment files
+.env
+.env.*
+appsettings.Local.json
+appsettings.*.Local.json
+
+# Docker
+docker-compose.override.yml
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+.DS_Store
+.idea/
+.vscode/
+
+# Project backup/generated upgrade files
+Backup/
+UpgradeLog.htm

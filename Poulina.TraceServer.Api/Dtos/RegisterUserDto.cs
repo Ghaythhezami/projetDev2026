@@ -8,6 +8,5 @@ namespace AgileAi.Api.Dtos
         public string MotDePasse { get; set; }
         public string Telephone { get; set; }
         public string Role { get; set; }
-        public string Filiale { get; set; }
     }
 }

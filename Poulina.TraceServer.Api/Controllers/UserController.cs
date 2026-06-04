@@ -90,8 +90,7 @@ namespace AgileAi.Api.Controllers
                 Prenom = request.Prenom,
                 Email = request.Email,
                 Telephone = request.Telephone,
-                Role = request.Role,
-                Filiale = request.Filiale
+                Role = request.Role
             };
 
             var passwordHasher = new PasswordHasher<User>();
@@ -120,8 +119,7 @@ namespace AgileAi.Api.Controllers
                     Prenom = user.Prenom,
                     Email = user.Email,
                     Telephone = user.Telephone,
-                    Role = user.Role,
-                    Filiale = user.Filiale
+                    Role = user.Role
                 })
                 .ToListAsync();
 
@@ -190,8 +188,7 @@ namespace AgileAi.Api.Controllers
                     Prenom = user.Prenom,
                     Email = user.Email,
                     Telephone = user.Telephone,
-                    Role = user.Role,
-                    Filiale = user.Filiale
+                    Role = user.Role
                 })
                 .ToListAsync();
 
@@ -278,8 +275,7 @@ namespace AgileAi.Api.Controllers
                 Prenom = user.Prenom,
                 Email = user.Email,
                 Telephone = user.Telephone,
-                Role = user.Role,
-                Filiale = user.Filiale
+                Role = user.Role
             };
         }
     }

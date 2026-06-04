@@ -38,7 +38,5 @@ public class ProjectMemberDto {
         public string Prenom { get; set; }
         public string Email { get; set; }
         public string Role { get; set; } // e.g., "admin", "product owner", "developer"
-        public string Filiale { get; set; }
     }
 }
-
