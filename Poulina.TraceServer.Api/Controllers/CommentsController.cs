@@ -58,11 +58,23 @@ namespace AgileAi.Api.Controllers
             return Ok(result.Select(comment => ToResponse(comment)));
         }
 
+        /// <summary>
+        /// Adds a new comment to a specific issue.
+        /// Performs input validation and parses mentions to alert users.
+        /// </summary>
+        /// <param name="request">The comment creation data.</param>
+        /// <returns>The created comment with resolved mentions.</returns>
         [HttpPost]
         public async Task<IActionResult> AddComment([FromBody] CreateCommentDto request)
         {
             if (request == null)
-                return BadRequest();
+                return BadRequest(new ApiErrorResponse { Message = "Comment request cannot be null.", Code = "NULL_REQUEST" });
+
+            if (string.IsNullOrWhiteSpace(request.Content))
+                return BadRequest(new ApiErrorResponse { Message = "Comment content cannot be empty.", Code = "EMPTY_COMMENT_CONTENT" });
+
+            if (request.Content.Length > 2000)
+                return BadRequest(new ApiErrorResponse { Message = "Comment content cannot exceed 2000 characters.", Code = "COMMENT_TOO_LONG" });
 
             if (!await _projectAuthorization.CanAccessIssue(request.IssueId))
                 return Forbid();
@@ -169,11 +181,18 @@ namespace AgileAi.Api.Controllers
             _boardHub = boardHub;
         }
 
+        /// <summary>
+        /// Creates a new subtask under an existing issue.
+        /// </summary>
+        /// <param name="request">The subtask creation data.</param>
         [HttpPost]
         public async Task<IActionResult> AddSubTask([FromBody] CreateSubTaskDto request)
         {
             if (request == null)
-                return BadRequest();
+                return BadRequest(new ApiErrorResponse { Message = "Request cannot be null.", Code = "NULL_REQUEST" });
+
+            if (string.IsNullOrWhiteSpace(request.Title))
+                return BadRequest(new ApiErrorResponse { Message = "Subtask title is required.", Code = "EMPTY_SUBTASK_TITLE" });
 
             if (!await _projectAuthorization.CanAccessIssue(request.IssueId))
                 return Forbid();
