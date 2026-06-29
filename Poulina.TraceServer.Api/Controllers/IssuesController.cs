@@ -45,6 +45,11 @@ namespace AgileAi.Api.Controllers
             _boardHub = boardHub;
         }
 
+        /// <summary>
+        /// Retrieves the Kanban board for a specific sprint, including all associated issues.
+        /// </summary>
+        /// <param name="sprintId">The unique identifier of the sprint.</param>
+        /// <returns>A list of issues grouped for Kanban display.</returns>
         [HttpGet("board/{sprintId}")]
         public async Task<IActionResult> GetKanbanBoard(Guid sprintId)
         {
@@ -56,6 +61,11 @@ namespace AgileAi.Api.Controllers
             return Ok(result.Select(ToResponse));
         }
 
+        /// <summary>
+        /// Retrieves all pending tasks assigned to the currently authenticated user.
+        /// Excludes issues with status 'Done'.
+        /// </summary>
+        /// <returns>A list of active issues assigned to the current user.</returns>
         [HttpGet("my-tasks")]
         public async Task<IActionResult> GetMyTasks()
         {
@@ -65,11 +75,17 @@ namespace AgileAi.Api.Controllers
             return Ok(result.Select(ToResponse));
         }
 
+        /// <summary>
+        /// Creates a new issue under a specified User Story.
+        /// Notifies the assignee and broadcasts the change via SignalR.
+        /// </summary>
+        /// <param name="request">The issue creation payload.</param>
+        /// <returns>The created issue object.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateIssue([FromBody] CreateIssueDto request)
         {
             if (request == null)
-                return BadRequest();
+                return BadRequest(new ApiErrorResponse { Message = "Request body cannot be null.", Code = "NULL_REQUEST" });
 
             if (!await _projectAuthorization.CanAccessUserStory(request.UserStoryId))
                 return Forbid();
@@ -153,6 +169,12 @@ namespace AgileAi.Api.Controllers
             return result != null ? Ok(ToResponse(result)) : NotFound();
         }
 
+        /// <summary>
+        /// Manually assigns or unassigns a user to/from an issue.
+        /// Sends a notification to the new assignee if applicable.
+        /// </summary>
+        /// <param name="id">The unique identifier of the issue.</param>
+        /// <param name="assigneeId">The user ID to assign, or null to unassign.</param>
         [HttpPatch("{id}/assign")]
         public async Task<IActionResult> AssignIssue(Guid id, [FromBody] Guid? assigneeId)
         {
@@ -169,6 +191,11 @@ namespace AgileAi.Api.Controllers
             return result != null ? Ok(ToResponse(result)) : NotFound();
         }
 
+        /// <summary>
+        /// Triggers the AI-based auto-assignment algorithm for a given issue.
+        /// The system selects the most suitable team member based on workload and skills.
+        /// </summary>
+        /// <param name="id">The unique identifier of the issue to auto-assign.</param>
         [HttpPost("{id}/auto-assign")]
         public async Task<IActionResult> AutoAssignIssue(Guid id)
         {

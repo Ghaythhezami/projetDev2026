@@ -27,6 +27,11 @@ namespace AgileAi.Api.Controllers
             _projectAuthorization = projectAuthorization;
         }
 
+        /// <summary>
+        /// Retrieves all sprints belonging to a specific project.
+        /// </summary>
+        /// <param name="projectId">The unique identifier of the project.</param>
+        /// <returns>A list of sprints ordered by creation date.</returns>
         [HttpGet("project/{projectId}")]
         public async Task<IActionResult> GetSprintsByProject(Guid projectId)
         {
@@ -38,11 +43,17 @@ namespace AgileAi.Api.Controllers
             return Ok(result.Select(ToResponse));
         }
 
+        /// <summary>
+        /// Creates a new sprint for a project. The sprint name must be unique within the project.
+        /// Start date must be strictly before end date.
+        /// </summary>
+        /// <param name="request">The sprint creation payload.</param>
+        /// <returns>The created sprint object.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateSprint([FromBody] CreateSprintDto request)
         {
             if (request == null)
-                return BadRequest();
+                return BadRequest(new ApiErrorResponse { Message = "Request body cannot be null.", Code = "NULL_REQUEST" });
 
             if (!await _projectAuthorization.CanManageProject(request.ProjectId))
                 return Forbid();
@@ -63,6 +74,11 @@ namespace AgileAi.Api.Controllers
             return Ok(ToResponse(result));
         }
 
+        /// <summary>
+        /// Starts a sprint, transitioning it from 'Planned' to 'Active'.
+        /// Only one sprint can be active per project at a time.
+        /// </summary>
+        /// <param name="id">The unique identifier of the sprint to start.</param>
         [HttpPost("{id}/start")]
         public async Task<IActionResult> StartSprint(Guid id)
         {
@@ -73,6 +89,10 @@ namespace AgileAi.Api.Controllers
             return result != null ? Ok(ToResponse(result)) : NotFound();
         }
 
+        /// <summary>
+        /// Closes an active sprint. Incomplete user stories are moved back to the product backlog.
+        /// </summary>
+        /// <param name="id">The unique identifier of the sprint to close.</param>
         [HttpPost("{id}/close")]
         public async Task<IActionResult> CloseSprint(Guid id)
         {
