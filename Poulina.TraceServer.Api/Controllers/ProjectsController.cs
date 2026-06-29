@@ -30,6 +30,11 @@ namespace AgileAi.Api.Controllers
             _currentUser = currentUser;
         }
 
+        /// <summary>
+        /// Retrieves project metadata by its unique identifier.
+        /// </summary>
+        /// <param name="id">The unique identifier of the project.</param>
+        /// <returns>The project response DTO if found and authorized.</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -42,11 +47,21 @@ namespace AgileAi.Api.Controllers
             return result != null ? Ok(ToResponse(result)) : NotFound();
         }
 
+        /// <summary>
+        /// Creates a new project and assigns the current user as the project owner.
+        /// </summary>
+        /// <param name="request">The project creation model containing name, description, and project key.</param>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto request)
         {
             if (request == null)
-                return BadRequest();
+                return BadRequest(new ApiErrorResponse { Message = "Project data cannot be null.", Code = "NULL_REQUEST" });
+
+            if (string.IsNullOrWhiteSpace(request.ProjectName))
+                return BadRequest(new ApiErrorResponse { Message = "Project name is required.", Code = "EMPTY_PROJECT_NAME" });
+
+            if (string.IsNullOrWhiteSpace(request.Key) || request.Key.Length < 2)
+                return BadRequest(new ApiErrorResponse { Message = "Project Key must be at least 2 characters.", Code = "INVALID_PROJECT_KEY" });
 
             var result = await _mediator.Send(new CreateProjectCommand(
                 request.ProjectName,
