@@ -55,11 +55,23 @@ namespace AgileAi.Api.Controllers
             return Ok(result.Select(ToResponse));
         }
 
+        /// <summary>
+        /// Creates a new User Story and associates it with an Epic.
+        /// Validates story parameters and authorization.
+        /// </summary>
+        /// <param name="request">The creation payload containing title, epic, story points, priority, etc.</param>
+        /// <returns>The created User Story response.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateUserStory([FromBody] CreateUserStoryDto request)
         {
             if (request == null)
-                return BadRequest();
+                return BadRequest(new ApiErrorResponse { Message = "Request cannot be null.", Code = "NULL_REQUEST" });
+
+            if (string.IsNullOrWhiteSpace(request.Title))
+                return BadRequest(new ApiErrorResponse { Message = "User Story title is required.", Code = "EMPTY_TITLE" });
+
+            if (request.StoryPoints < 0)
+                return BadRequest(new ApiErrorResponse { Message = "Story points cannot be negative.", Code = "INVALID_STORY_POINTS" });
 
             var projectId = await _context.Epics
                 .Where(e => e.EpicId == request.EpicId)
@@ -85,6 +97,11 @@ namespace AgileAi.Api.Controllers
             return Ok(ToResponse(result));
         }
 
+        /// <summary>
+        /// Assigns a User Story to a specific Sprint, or moves it to the Product Backlog if sprintId is null.
+        /// </summary>
+        /// <param name="id">The unique identifier of the User Story.</param>
+        /// <param name="sprintId">The unique identifier of the target Sprint (optional).</param>
         [HttpPatch("{id}/sprint")]
         public async Task<IActionResult> AssignToSprint(Guid id, [FromBody] Guid? sprintId)
         {
