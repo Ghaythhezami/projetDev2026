@@ -36,11 +36,15 @@ namespace AgileAi.Api.Controllers
             _currentUser = currentUser;
         }
 
+        /// <summary>
+        /// Authenticates a user using email and password, returning JWT access token and refresh token.
+        /// </summary>
+        /// <param name="login">Login details (email and password).</param>
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] LoginRequestDto login)
         {
             if (login == null)
-                return BadRequest();
+                return BadRequest(new ApiErrorResponse { Message = "Login parameters are required.", Code = "NULL_REQUEST" });
 
             var user = await _authContext.Users.FirstOrDefaultAsync(x => x.Email == login.Email);
 
@@ -64,11 +68,16 @@ namespace AgileAi.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// Registers a new user with a specific application role.
+        /// Validates password strength, email availability, and roles constraints.
+        /// </summary>
+        /// <param name="request">User details for registration.</param>
         [HttpPost("register")]
         public async Task<IActionResult> AddUserWithRole([FromBody] RegisterUserDto request)
         {
             if (request == null || string.IsNullOrEmpty(request.Role))
-                return BadRequest();
+                return BadRequest(new ApiErrorResponse { Message = "User details and role are required.", Code = "NULL_REQUEST" });
 
             var roleName = request.Role;
 
