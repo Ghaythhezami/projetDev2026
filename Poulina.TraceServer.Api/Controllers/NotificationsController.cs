@@ -29,6 +29,11 @@ namespace AgileAi.Api.Controllers
             _activityService = activityService;
         }
 
+        /// <summary>
+        /// Retrieves all notifications for the currently logged-in user.
+        /// Notifications are sorted in descending order of their creation date.
+        /// </summary>
+        /// <returns>A list of user notifications.</returns>
         [HttpGet("mine")]
         public async Task<IActionResult> GetMine()
         {
@@ -50,6 +55,10 @@ namespace AgileAi.Api.Controllers
             return Ok(notifications);
         }
 
+        /// <summary>
+        /// Sandbox/Testing endpoint to trigger manual test notifications.
+        /// </summary>
+        /// <param name="request">The test notification request model.</param>
         [HttpPost("TTest")]
         public async Task<IActionResult> TTest([FromBody] TestNotificationRequestDto request)
         {
@@ -83,6 +92,11 @@ namespace AgileAi.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// Dispatches a notification to a specific user.
+        /// Validates receiver existence and formats optional redirect links.
+        /// </summary>
+        /// <param name="request">The notification details.</param>
         [HttpPost("Send")]
         public async Task<IActionResult> Send([FromBody] SendNotificationRequestDto request)
         {
@@ -124,6 +138,11 @@ namespace AgileAi.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// Marks a notification as read.
+        /// Only notifications belonging to the current user can be modified.
+        /// </summary>
+        /// <param name="id">The unique identifier of the notification.</param>
         [HttpPatch("{id}/read")]
         public async Task<IActionResult> MarkRead(Guid id)
         {
