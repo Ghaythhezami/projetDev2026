@@ -50,6 +50,11 @@ namespace AgileAi.Api.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Retrieves all attachments linked to a specific issue.
+        /// </summary>
+        /// <param name="issueId">The unique identifier of the issue.</param>
+        /// <returns>A list of issue attachments.</returns>
         [HttpGet("issue/{issueId}")]
         public async Task<IActionResult> GetForIssue(Guid issueId)
         {
@@ -60,6 +65,12 @@ namespace AgileAi.Api.Controllers
             return Ok(attachments.Select(ToResponse));
         }
 
+        /// <summary>
+        /// Uploads a file attachment for a given issue.
+        /// Restricts file size to a maximum of 25MB.
+        /// </summary>
+        /// <param name="issueId">The unique identifier of the target issue.</param>
+        /// <param name="file">The multipart file payload.</param>
         [HttpPost("issue/{issueId}")]
         [RequestSizeLimit(25_000_000)]
         public async Task<IActionResult> Upload(Guid issueId, [FromForm] IFormFile file)
@@ -70,7 +81,7 @@ namespace AgileAi.Api.Controllers
             if (file == null || file.Length == 0)
                 return BadRequest(new ApiErrorResponse
                 {
-                    Message = "A file is required.",
+                    Message = "A file is required and cannot be empty.",
                     Code = "FILE_REQUIRED"
                 });
 
